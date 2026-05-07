@@ -1,0 +1,13 @@
+{
+  "name": "Street Foods Corner - Tabogon",
+  "description": "A premium, mobile-first street food ordering experience from Tabogon, Cebu. Handcrafted, cinematic, and fast.",
+  "requestFramePermissions": [
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "Firebase Auth",
+    "Firestore database",
+    "Real-time orders",
+    "Motion animations"
+  ]
+}

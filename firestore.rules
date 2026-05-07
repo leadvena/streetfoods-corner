@@ -1,0 +1,56 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // MENU COLLECTION
+    match /menu/{itemId} {
+      allow read: if true; // Public can see menu
+      allow write: if isAdmin();
+    }
+
+    // ORDERS COLLECTION
+    match /orders/{orderId} {
+      // Customers can create orders
+      allow create: if 
+        incoming().keys().hasAll(['customerName', 'phone', 'items', 'total', 'status', 'timestamp', 'type']) &&
+        incoming().status == 'New' &&
+        incoming().timestamp == request.time &&
+        incoming().customerName is string && incoming().customerName.size() <= 100 &&
+        incoming().phone is string && incoming().phone.size() <= 20;
+
+      // Only admins can read/update orders
+      allow read, update, delete: if isAdmin();
+    }
+
+    // ADMINS COLLECTION
+    match /admins/{adminId} {
+      allow read: if isSignedIn() && request.auth.uid == adminId;
+      allow write: if false; // Only manageable via console or superadmin logic (not implemented here)
+    }
+  }
+}

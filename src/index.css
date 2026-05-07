@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Syne", sans-serif;
+
+  --color-brand-cream: #F8FAFC;
+  --color-brand-charcoal: #0F172A;
+  --color-brand-primary: #2D5BFF;
+  --color-brand-secondary: #00E5FF;
+  --color-brand-accent: #DFFF00;
+
+  --color-brand-orange: #2D5BFF;
+  --color-brand-red: #00E5FF;
+  --color-brand-yellow: #DFFF00;
+
+  --radius-xl: 1.5rem;
+  --radius-2xl: 2rem;
+  --radius-3xl: 2.5rem;
+  
+  --shadow-neo: 6px 6px 0px #0F172A;
+  --shadow-neo-blue: 6px 6px 0px #2D5BFF;
+  --shadow-neo-orange: 6px 6px 0px #2D5BFF;
+  --shadow-neo-cyan: 6px 6px 0px #00E5FF;
+  --shadow-neo-sm: 3px 3px 0px #0F172A;
+}
+
+@layer base {
+  body {
+    @apply bg-brand-cream text-brand-charcoal font-sans antialiased overflow-x-hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight uppercase italic;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/20;
+  }
+  
+  .btn-primary {
+    @apply px-8 py-4 bg-brand-primary text-white rounded-2xl font-black uppercase tracking-wider text-sm shadow-neo active:shadow-none active:translate-x-1 active:translate-y-1 transition-all;
+  }
+
+  .btn-secondary {
+    @apply px-8 py-4 bg-white border-[1.5px] border-brand-charcoal rounded-2xl font-black uppercase tracking-wider text-sm hover:bg-brand-cream transition-colors active:scale-95;
+  }
+
+  .card-immersive {
+    @apply bg-white rounded-[40px] border-[1.5px] border-brand-charcoal overflow-hidden shadow-neo-sm hover:shadow-neo transition-all duration-300;
+  }
+
+  .badge-premium {
+    @apply inline-flex items-center gap-2 bg-brand-accent px-4 py-1.5 rounded-full border-[1.5px] border-brand-charcoal shadow-neo-sm;
+  }
+
+  .ambient-bg {
+    @apply fixed inset-0 pointer-events-none z-0;
+  }
+}
