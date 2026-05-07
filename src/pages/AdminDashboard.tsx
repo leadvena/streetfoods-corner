@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
-  BarChart3, Clock, Package, CheckCircle2, 
-  MessageSquare, ExternalLink, RefreshCw, LogOut,
-  TrendingUp, Users, DollarSign, Loader2, Phone, MapPin
-} from 'lucide-react';
+  ChartBar, Clock, Package, CheckCircle, 
+  ChatTeardropText, ArrowSquareOut, ArrowsClockwise, SignOut,
+  TrendUp, Users, CurrencyDollar, SpinnerGap, Phone, MapPin
+} from '@phosphor-icons/react';
 import { onSnapshot, collection, query, orderBy, doc, updateDoc, Timestamp } from 'firebase/firestore';
 import { auth, db } from '../lib/firebase';
 import { Order, OrderStatus } from '../types';
@@ -69,68 +69,70 @@ export default function AdminDashboard() {
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
-        <Loader2 className="w-12 h-12 text-brand-orange animate-spin" />
-        <span className="font-bold opacity-40">Loading Dashboard...</span>
+        <SpinnerGap className="w-12 h-12 text-brand-accent animate-spin" weight="bold" />
+        <span className="font-bold text-white/40 uppercase tracking-widest text-xs">Initializing Dashboard...</span>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12">
+    <div className="max-w-7xl mx-auto px-6 py-12 relative z-10">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-16">
         <div>
-          <h1 className="text-5xl font-bold mb-2">Command Center</h1>
-          <p className="text-brand-charcoal/40 font-medium">Real-time operations for Street Foods Corner</p>
+          <h1 className="text-5xl font-black uppercase tracking-tighter mb-2 text-white">Command Center</h1>
+          <p className="text-white/40 font-bold uppercase tracking-widest text-xs">Real-time operations for Street Foods Corner</p>
         </div>
         <button 
           onClick={() => auth.signOut()}
-          className="flex items-center gap-2 px-6 py-3 bg-brand-charcoal text-white rounded-2xl hover:bg-brand-red transition-colors self-start"
+          className="flex items-center gap-2 px-6 py-3 glass-inner text-red-400 hover:text-white hover:bg-red-500 rounded-xl transition-all border border-red-500/20 hover:border-red-500 font-bold text-xs uppercase tracking-widest shadow-[0_0_15px_rgba(239,68,68,0.1)] hover:shadow-[0_0_20px_rgba(239,68,68,0.4)]"
         >
-          <LogOut size={20} /> Logout
+          <SignOut size={16} weight="bold" /> Terminate Session
         </button>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
         {[
-          { label: 'Total Sales', value: formatPrice(stats.totalSales), icon: DollarSign, color: 'text-green-500' },
-          { label: 'New Orders', value: stats.newOrders, icon: Clock, color: 'text-blue-500' },
-          { label: 'In Progress', value: stats.preparing, icon: Package, color: 'text-brand-orange' },
-          { label: 'Ready for Pickup', value: stats.ready, icon: CheckCircle2, color: 'text-green-600' }
+          { label: 'Total Revenue', value: formatPrice(stats.totalSales), icon: CurrencyDollar, color: 'text-brand-accent shadow-[0_0_20px_rgba(0,210,255,0.2)]' },
+          { label: 'Incoming', value: stats.newOrders, icon: Clock, color: 'text-white shadow-[0_0_20px_rgba(255,255,255,0.1)]' },
+          { label: 'Processing', value: stats.preparing, icon: Package, color: 'text-brand-accent shadow-[0_0_20px_rgba(0,210,255,0.2)]' },
+          { label: 'Ready/Staged', value: stats.ready, icon: CheckCircle, color: 'text-white shadow-[0_0_20px_rgba(255,255,255,0.1)]' }
         ].map((s, i) => (
           <motion.div 
             key={i}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="bg-white p-8 rounded-[40px] shadow-sm border border-brand-charcoal/5 flex items-center justify-between"
+            className="glass-panel p-8 rounded-[2rem] flex items-center justify-between overflow-hidden relative group"
           >
-            <div>
-              <p className="text-sm font-bold opacity-40 uppercase mb-2 tracking-wider">{s.label}</p>
-              <p className="text-3xl font-display font-bold">{s.value}</p>
+            <div className="relative z-10">
+              <p className="text-[10px] font-bold text-white/40 uppercase tracking-widest mb-2">{s.label}</p>
+              <p className="text-3xl font-display font-black text-white">{s.value}</p>
             </div>
-            <div className={cn("p-4 rounded-3xl bg-current opacity-10", s.color)} />
-            <s.icon className={cn("absolute -translate-x-12 opacity-100", s.color)} size={32} />
+            <s.icon className={cn("text-5xl opacity-20 group-hover:scale-110 transition-transform relative z-10", s.color)} weight="duotone" />
+            
+            {/* Ambient Glow */}
+            <div className={cn("absolute -bottom-4 -right-4 w-24 h-24 rounded-full blur-[40px] opacity-20", s.color.includes('brand-accent') ? 'bg-brand-accent' : 'bg-white')} />
           </motion.div>
         ))}
       </div>
 
       {/* Order Management */}
-      <div className="bg-brand-charcoal p-10 rounded-[60px] shadow-2xl overflow-hidden min-h-[600px]">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-10">
-          <h2 className="text-3xl font-bold text-white flex items-center gap-3">
-            <TrendingUp size={28} className="text-brand-orange" />
-            Live Orders
+      <div className="glass-panel p-10 rounded-[3rem] overflow-hidden min-h-[600px] border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-10 border-b border-white/10 pb-8">
+          <h2 className="text-2xl font-black uppercase tracking-tight text-white flex items-center gap-3">
+            <TrendUp size={28} weight="bold" className="text-brand-accent" />
+            Live Telemetry
           </h2>
           
-          <div className="flex gap-2 bg-white/5 p-2 rounded-2xl border border-white/10 overflow-x-auto scrollbar-hide">
+          <div className="flex gap-2 glass-inner p-2 rounded-2xl border border-white/10 overflow-x-auto scrollbar-hide">
             {['All', 'New', 'Preparing', 'Ready', 'Completed'].map((f) => (
               <button
                 key={f}
                 onClick={() => setFilter(f as any)}
                 className={cn(
-                  "px-6 py-2 rounded-xl text-sm font-bold transition-all",
-                  filter === f ? "bg-white text-brand-charcoal shadow-lg" : "text-white/40 hover:text-white"
+                  "px-6 py-2 rounded-xl text-xs uppercase tracking-widest font-bold transition-all",
+                  filter === f ? "bg-brand-accent text-black shadow-[0_0_15px_rgba(0,210,255,0.3)]" : "text-white/40 hover:text-white"
                 )}
               >
                 {f}
@@ -143,8 +145,8 @@ export default function AdminDashboard() {
           <AnimatePresence mode="popLayout">
             {filteredOrders.length === 0 ? (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col items-center justify-center py-32 text-white/20">
-                <Package size={80} className="mb-6" />
-                <p className="text-2xl font-bold">No orders found</p>
+                <Package size={64} weight="thin" className="mb-6" />
+                <p className="text-xl font-bold tracking-tight">No active signals</p>
               </motion.div>
             ) : (
               filteredOrders.map((order) => (
@@ -154,36 +156,36 @@ export default function AdminDashboard() {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 20 }}
-                  className="bg-white/5 border border-white/10 p-8 rounded-[40px] group hover:border-brand-orange/30 transition-colors"
+                  className="glass-inner border border-white/5 p-8 rounded-[2rem] group hover:border-brand-accent/30 transition-colors relative overflow-hidden"
                 >
-                  <div className="flex flex-col lg:flex-row gap-8 justify-between">
+                  <div className="flex flex-col lg:flex-row gap-8 justify-between relative z-10">
                     {/* Customer Info */}
                     <div className="space-y-4">
                       <div className="flex items-center gap-3">
                         <span className={cn(
-                          "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider",
-                          order.status === 'New' && "bg-brand-red text-white",
-                          order.status === 'Preparing' && "bg-brand-orange text-white",
-                          order.status === 'Ready' && "bg-green-500 text-white",
-                          order.status === 'Completed' && "bg-white/20 text-white/40"
+                          "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest",
+                          order.status === 'New' && "bg-white text-black shadow-[0_0_15px_rgba(255,255,255,0.3)]",
+                          order.status === 'Preparing' && "bg-brand-accent text-black shadow-[0_0_15px_rgba(0,210,255,0.3)]",
+                          order.status === 'Ready' && "bg-green-400 text-black shadow-[0_0_15px_rgba(74,222,128,0.3)]",
+                          order.status === 'Completed' && "bg-white/10 text-white/40"
                         )}>
                           {order.status}
                         </span>
-                        <span className="text-white/40 text-xs font-medium">#{order.id?.slice(-6).toUpperCase()}</span>
+                        <span className="text-brand-accent/40 text-xs font-bold font-mono tracking-widest uppercase">#{order.id?.slice(-6)}</span>
                       </div>
-                      <h4 className="text-2xl font-bold text-white">{order.customerName}</h4>
-                      <div className="flex items-center gap-4 text-sm text-white/60">
-                        <span className="flex items-center gap-1"><Phone size={14} /> {order.phone}</span>
-                        <span className="flex items-center gap-1"><MapPin size={14} /> {order.type}</span>
+                      <h4 className="text-2xl font-black uppercase tracking-tight text-white">{order.customerName}</h4>
+                      <div className="flex items-center gap-4 text-xs font-bold tracking-wider text-white/60">
+                        <span className="flex items-center gap-1.5"><Phone size={14} weight="bold" /> {order.phone}</span>
+                        <span className="flex items-center gap-1.5"><MapPin size={14} weight="bold" /> {order.type}</span>
                       </div>
-                      {order.address && <p className="text-xs text-white/40 max-w-sm">{order.address}</p>}
+                      {order.address && <p className="text-[10px] text-white/40 max-w-sm uppercase tracking-widest">{order.address}</p>}
                     </div>
 
                     {/* Order Details */}
-                    <div className="flex-grow flex flex-wrap gap-3">
+                    <div className="flex-grow flex flex-wrap gap-3 content-start">
                       {order.items.map((item, idx) => (
-                        <div key={idx} className="bg-white/10 px-4 py-2 rounded-xl text-sm text-white/80 border border-white/5">
-                          <span className="font-bold text-brand-yellow mr-2">{item.quantity}x</span> {item.name}
+                        <div key={idx} className="bg-white/5 px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider text-white/80 border border-white/5">
+                          <span className="text-brand-accent mr-2">x{item.quantity}</span> {item.name}
                         </div>
                       ))}
                     </div>
@@ -191,30 +193,35 @@ export default function AdminDashboard() {
                     {/* Actions */}
                     <div className="flex flex-col gap-4 lg:min-w-[200px]">
                       <div className="text-right mb-2">
-                        <p className="text-brand-orange text-3xl font-display font-bold">{formatPrice(order.total)}</p>
+                        <p className="text-white text-2xl font-display font-black">{formatPrice(order.total)}</p>
                       </div>
                       <div className="flex flex-wrap gap-2 justify-end">
                         {order.status === 'New' && (
-                          <button onClick={() => updateStatus(order.id!, 'Preparing')} className="px-4 py-2 bg-brand-orange text-white rounded-xl text-sm font-bold shadow-lg shadow-brand-orange/20">
-                            Start Prep
+                          <button onClick={() => updateStatus(order.id!, 'Preparing')} className="px-6 py-3 bg-brand-accent text-black rounded-xl text-xs uppercase tracking-widest font-bold shadow-[0_0_20px_rgba(0,210,255,0.3)] hover:scale-105 transition-transform">
+                            Initialize
                           </button>
                         )}
                         {order.status === 'Preparing' && (
-                          <button onClick={() => updateStatus(order.id!, 'Ready')} className="px-4 py-2 bg-green-500 text-white rounded-xl text-sm font-bold shadow-lg shadow-green-500/20 flex items-center gap-1">
-                            Ready <CheckCircle2 size={16} />
+                          <button onClick={() => updateStatus(order.id!, 'Ready')} className="px-6 py-3 bg-green-400 text-black rounded-xl text-xs uppercase tracking-widest font-bold shadow-[0_0_20px_rgba(74,222,128,0.3)] flex items-center gap-2 hover:scale-105 transition-transform">
+                            Stage <CheckCircle size={16} weight="bold" />
                           </button>
                         )}
                         {order.status === 'Ready' && (
-                          <button onClick={() => updateStatus(order.id!, 'Completed')} className="px-4 py-2 bg-white text-brand-charcoal rounded-xl text-sm font-bold">
-                            Complete
+                          <button onClick={() => updateStatus(order.id!, 'Completed')} className="px-6 py-3 glass-inner hover:bg-white text-white hover:text-black border border-white/20 rounded-xl text-xs uppercase tracking-widest font-bold transition-all">
+                            Finalize
                           </button>
                         )}
-                        <button className="p-2 text-white/40 hover:text-white transition-colors">
-                          <MessageSquare size={18} />
+                        <button className="p-3 text-white/40 hover:text-white glass-inner rounded-xl border border-white/10 transition-colors">
+                          <ChatTeardropText size={18} weight="bold" />
                         </button>
                       </div>
                     </div>
                   </div>
+                  
+                  {/* Subtle Background Status Indicator */}
+                  {order.status === 'New' && <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />}
+                  {order.status === 'Preparing' && <div className="absolute top-0 right-0 w-64 h-64 bg-brand-accent/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />}
+                  {order.status === 'Ready' && <div className="absolute top-0 right-0 w-64 h-64 bg-green-400/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/2 pointer-events-none" />}
                 </motion.div>
               ))
             )}

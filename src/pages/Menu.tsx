@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, ChevronRight, ShoppingBag, X, Plus, Minus, Trash2 } from 'lucide-react';
+import { MagnifyingGlass, ShoppingBag, X, Plus, Minus, Trash } from '@phosphor-icons/react';
 import { MENU_ITEMS } from '../constants';
-import { Category, MenuItem as MenuItemType } from '../types';
+import { Category } from '../types';
 import { useCart } from '../lib/cartContext';
 import { formatPrice, cn } from '../lib/utils';
 import { Link } from 'react-router-dom';
@@ -21,20 +21,25 @@ export default function MenuPage() {
   );
 
   return (
-    <div className="min-h-screen bg-brand-cream relative">
+    <div className="min-h-[100dvh] relative overflow-hidden">
+      {/* Background Gradients */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-accent/5 rounded-full blur-[150px]" />
+      </div>
+
       {/* Header/Categories */}
-      <div className="sticky top-20 z-40 bg-brand-cream/80 backdrop-blur-md px-4 py-6 border-b border-brand-charcoal/5">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
+      <div className="sticky top-28 z-40 px-6 max-w-7xl mx-auto mb-12">
+        <div className="glass-panel p-4 rounded-3xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex gap-2 overflow-x-auto scrollbar-hide">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
                 className={cn(
-                  "px-8 py-3 rounded-full font-bold whitespace-nowrap transition-all duration-300 text-sm",
+                  "px-6 py-2.5 rounded-full font-bold whitespace-nowrap transition-all duration-300 text-xs tracking-wider uppercase",
                   activeCategory === cat 
-                    ? "bg-brand-charcoal text-white shadow-lg" 
-                    : "bg-white text-brand-charcoal/60 hover:bg-brand-charcoal/5"
+                    ? "bg-brand-accent text-black shadow-[0_0_15px_rgba(0,210,255,0.3)]" 
+                    : "text-white/60 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10"
                 )}
               >
                 {cat}
@@ -42,66 +47,66 @@ export default function MenuPage() {
             ))}
           </div>
 
-          <div className="relative w-full md:w-80">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-brand-charcoal/30" size={20} />
+          <div className="relative w-full md:w-72 shrink-0">
+            <MagnifyingGlass className="absolute left-4 top-1/2 -translate-y-1/2 text-white/40" size={18} weight="bold" />
             <input 
               type="text" 
-              placeholder="Search foods..."
+              placeholder="Search catalog..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-6 py-3 bg-white rounded-full border border-brand-charcoal/10 focus:ring-2 focus:ring-brand-orange focus:border-transparent outline-none transition-all"
+              className="w-full pl-11 pr-4 py-3 bg-white/5 rounded-full border border-white/10 focus:ring-1 focus:ring-brand-accent focus:border-brand-accent outline-none transition-all text-white placeholder:text-white/30 text-sm"
             />
           </div>
         </div>
       </div>
 
       {/* Grid */}
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+      <div className="max-w-7xl mx-auto px-6 pb-32 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           <AnimatePresence mode="popLayout">
             {filteredItems.map((item) => (
               <motion.div
                 key={item.id}
                 layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                className="group p-4 bg-white rounded-[40px] border-[1.5px] border-brand-charcoal shadow-neo-sm hover:shadow-neo transition-all duration-500 flex flex-col"
+                initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, y: -20 }}
+                transition={{ type: "spring", stiffness: 100, damping: 20 }}
+                className="group relative glass-panel rounded-[2rem] p-4 flex flex-col hover:border-white/20 transition-colors"
               >
-                <div className="relative h-64 overflow-hidden rounded-[32px] mb-6 border border-brand-charcoal/5">
-                  <img src={item.image} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt={item.name} />
-                  <div className="absolute top-4 right-4 badge-premium bg-white/95 pb-1">
-                    <span className="font-black italic text-sm">{formatPrice(item.price)}</span>
+                <div className="relative aspect-square overflow-hidden rounded-[1.5rem] mb-6">
+                  <img src={item.image} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-80 group-hover:opacity-100" alt={item.name} />
+                  <div className="absolute top-4 right-4 glass-inner px-3 py-1.5 rounded-full backdrop-blur-md border border-white/10">
+                    <span className="font-bold text-white text-sm">{formatPrice(item.price)}</span>
                   </div>
                 </div>
-                <h3 className="text-2xl font-black uppercase italic mb-2 group-hover:text-brand-red transition-colors">{item.name}</h3>
-                <p className="text-brand-charcoal/60 text-xs font-bold uppercase tracking-wider mb-6 leading-relaxed flex-grow">{item.description}</p>
+                
+                <h3 className="text-xl font-bold uppercase tracking-tight text-white mb-2">{item.name}</h3>
+                <p className="text-white/50 text-sm leading-relaxed flex-grow mb-6">{item.description}</p>
+                
                 <button 
                   onClick={() => addToCart(item)}
-                  className="w-full py-4 bg-brand-charcoal text-brand-cream rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2 hover:bg-brand-red shadow-neo-orange transition-all active:translate-x-1 active:translate-y-1 active:shadow-none"
+                  className="w-full py-4 glass-inner hover:bg-white/10 border border-white/10 text-white rounded-xl font-bold uppercase tracking-widest text-xs flex items-center justify-center gap-2 transition-all duration-300 hover:text-brand-accent hover:border-brand-accent/50"
                 >
-                  <Plus size={18} />
-                  Add to Cart
+                  <Plus size={16} weight="bold" />
+                  Acquire
                 </button>
               </motion.div>
             ))}
           </AnimatePresence>
         </div>
+        
+        {filteredItems.length === 0 && (
+          <motion.div 
+            initial={{ opacity: 0 }} 
+            animate={{ opacity: 1 }} 
+            className="flex flex-col items-center justify-center py-32 opacity-50"
+          >
+            <MagnifyingGlass size={64} weight="thin" className="mb-6 text-white/30" />
+            <p className="text-xl text-white font-bold tracking-tight">No items found matching your criteria.</p>
+          </motion.div>
+        )}
       </div>
-
-      {/* Floating Cart Button (Mobile) */}
-      {itemCount > 0 && !isCartOpen && (
-        <motion.button
-          initial={{ y: 100 }}
-          animate={{ y: 0 }}
-          onClick={() => setIsCartOpen(true)}
-          className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 bg-brand-orange text-white px-8 py-4 rounded-full shadow-2xl md:hidden"
-        >
-          <ShoppingBag size={24} />
-          <span className="font-bold">View Cart ({itemCount})</span>
-          <span className="font-display font-bold border-l border-white/20 pl-3">{formatPrice(total)}</span>
-        </motion.button>
-      )}
 
       {/* Cart Sidebar */}
       <AnimatePresence>
@@ -112,53 +117,56 @@ export default function MenuPage() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsCartOpen(false)}
-              className="fixed inset-0 bg-brand-charcoal/40 backdrop-blur-sm z-[60]"
+              className="fixed inset-0 bg-brand-bg/80 backdrop-blur-sm z-[60]"
             />
             <motion.div
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className="fixed top-0 right-0 bottom-0 w-full md:w-[450px] bg-brand-cream z-[70] shadow-2xl flex flex-col"
+              className="fixed top-0 right-0 bottom-0 w-full md:w-[450px] bg-brand-surface z-[70] shadow-2xl flex flex-col border-l border-white/10"
             >
-              <div className="p-8 flex items-center justify-between border-b border-brand-charcoal/5">
-                <h2 className="text-3xl font-bold">Your Cart</h2>
-                <button onClick={() => setIsCartOpen(false)} className="p-3 hover:bg-brand-charcoal/5 rounded-full transition-colors">
-                  <X size={24} />
+              <div className="p-8 flex items-center justify-between border-b border-white/5">
+                <h2 className="text-2xl font-black uppercase tracking-tight">Acquisitions</h2>
+                <button onClick={() => setIsCartOpen(false)} className="p-3 text-white/50 hover:text-white hover:bg-white/5 rounded-full transition-colors">
+                  <X size={20} weight="bold" />
                 </button>
               </div>
 
               <div className="flex-grow overflow-y-auto p-8 space-y-6">
                 {items.length === 0 ? (
                   <div className="h-full flex flex-col items-center justify-center text-center opacity-40">
-                    <ShoppingBag size={64} className="mb-4" />
-                    <p className="text-xl font-medium">Your cart is empty</p>
+                    <ShoppingBag size={48} weight="thin" className="mb-6" />
+                    <p className="text-lg font-medium tracking-tight">Your cache is empty</p>
                   </div>
                 ) : (
                   items.map((item) => (
                     <div key={item.id} className="flex gap-6 items-center">
-                      <img src={item.image} className="w-20 h-20 rounded-2xl object-cover" />
+                      <div className="relative w-20 h-20 rounded-xl overflow-hidden shrink-0 border border-white/10">
+                        <img src={item.image} className="w-full h-full object-cover opacity-80" />
+                      </div>
                       <div className="flex-grow">
-                        <h4 className="font-bold text-lg">{item.name}</h4>
-                        <p className="text-brand-orange font-bold font-display">{formatPrice(item.price)}</p>
-                        <div className="flex items-center gap-4 mt-2">
-                          <div className="flex items-center bg-brand-charcoal/5 rounded-full p-1">
+                        <h4 className="font-bold text-sm uppercase tracking-tight mb-1">{item.name}</h4>
+                        <p className="text-brand-accent font-bold mb-3">{formatPrice(item.price)}</p>
+                        
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center glass-inner rounded-full p-1 border border-white/10">
                             <button 
                               onClick={() => updateQuantity(item.id, -1)}
-                              className="p-1.5 hover:bg-white rounded-full transition-colors"
+                              className="p-1.5 text-white/60 hover:text-white hover:bg-white/10 rounded-full transition-colors"
                             >
-                              <Minus size={14} />
+                              <Minus size={12} weight="bold" />
                             </button>
-                            <span className="w-8 text-center font-bold">{item.quantity}</span>
+                            <span className="w-8 text-center font-bold text-sm">{item.quantity}</span>
                             <button 
                               onClick={() => updateQuantity(item.id, 1)}
-                              className="p-1.5 hover:bg-white rounded-full transition-colors"
+                              className="p-1.5 text-white/60 hover:text-white hover:bg-white/10 rounded-full transition-colors"
                             >
-                              <Plus size={14} />
+                              <Plus size={12} weight="bold" />
                             </button>
                           </div>
-                          <button onClick={() => removeFromCart(item.id)} className="text-brand-red p-2 hover:bg-brand-red/10 rounded-full transition-colors">
-                            <Trash2 size={18} />
+                          <button onClick={() => removeFromCart(item.id)} className="text-red-400 p-2 hover:bg-red-400/10 rounded-full transition-colors ml-auto shrink-0">
+                            <Trash size={16} weight="bold" />
                           </button>
                         </div>
                       </div>
@@ -167,38 +175,45 @@ export default function MenuPage() {
                 )}
               </div>
 
-              <div className="p-8 bg-white glass-edge space-y-6">
-                <div className="flex justify-between items-center text-xl font-bold">
-                  <span>Subtotal</span>
-                  <span className="font-display text-2xl text-brand-orange">{formatPrice(total)}</span>
+              <div className="p-8 bg-brand-bg/50 border-t border-white/5 space-y-6 backdrop-blur-md">
+                <div className="flex justify-between items-center text-lg font-bold">
+                  <span className="text-white/60 uppercase tracking-widest text-xs">Total Transmission</span>
+                  <span className="font-display text-2xl text-brand-accent">{formatPrice(total)}</span>
                 </div>
                 <Link 
                   to="/checkout" 
                   className={cn(
-                    "w-full btn-primary block text-center py-5 text-xl font-bold",
+                    "w-full btn-primary block text-center py-4",
                     items.length === 0 && "opacity-50 pointer-events-none grayscale"
                   )}
                 >
-                  Checkout
+                  Initialize Checkout
                 </Link>
-                <p className="text-center text-sm text-brand-charcoal/40">Taxes and delivery fee calculated at checkout</p>
+                <p className="text-center text-[10px] uppercase tracking-widest text-white/30">Taxes and delivery fee calculated at checkout</p>
               </div>
             </motion.div>
           </>
         )}
       </AnimatePresence>
 
-      {/* Cart Trigger (Desktop) */}
-      <button 
-        onClick={() => setIsCartOpen(true)}
-        className="fixed bottom-8 right-8 z-50 hidden md:flex items-center gap-4 bg-brand-charcoal text-white px-8 py-4 rounded-full shadow-2xl hover:bg-brand-orange transition-all hover:scale-105 active:scale-95 group"
-      >
-        <div className="relative">
-          <ShoppingBag size={24} />
-          {itemCount > 0 && <span className="absolute -top-1 -right-1 bg-brand-red w-4 h-4 rounded-full text-[10px] flex items-center justify-center">{itemCount}</span>}
-        </div>
-        <span className="font-bold border-l border-white/20 pl-4">{formatPrice(total)}</span>
-      </button>
+      {/* Floating Cart Trigger */}
+      <AnimatePresence>
+        {itemCount > 0 && !isCartOpen && (
+          <motion.button 
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            onClick={() => setIsCartOpen(true)}
+            className="fixed bottom-24 md:bottom-8 right-6 md:right-8 z-50 flex items-center gap-4 bg-brand-accent text-black px-6 py-4 rounded-full shadow-[0_0_30px_rgba(0,210,255,0.4)] hover:scale-105 transition-transform"
+          >
+            <div className="relative">
+              <ShoppingBag size={20} weight="fill" />
+              <span className="absolute -top-2 -right-2 bg-brand-bg text-white w-5 h-5 rounded-full text-[10px] font-bold flex items-center justify-center border border-brand-accent">{itemCount}</span>
+            </div>
+            <span className="font-bold border-l border-black/20 pl-4">{formatPrice(total)}</span>
+          </motion.button>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

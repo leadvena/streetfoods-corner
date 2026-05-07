@@ -1,63 +1,57 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,500,700,400,900&f[]=satoshi@900,700,500,300,400&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Syne", sans-serif;
+  --font-sans: "Satoshi", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Cabinet Grotesk", sans-serif;
 
-  --color-brand-cream: #F8FAFC;
-  --color-brand-charcoal: #0F172A;
-  --color-brand-primary: #2D5BFF;
-  --color-brand-secondary: #00E5FF;
-  --color-brand-accent: #DFFF00;
-
-  --color-brand-orange: #2D5BFF;
-  --color-brand-red: #00E5FF;
-  --color-brand-yellow: #DFFF00;
+  --color-brand-bg: #050505;
+  --color-brand-surface: #09090b;
+  --color-brand-surface-light: #18181b;
+  --color-brand-accent: #00d2ff;
+  --color-brand-accent-secondary: #3a7bd5;
 
   --radius-xl: 1.5rem;
   --radius-2xl: 2rem;
   --radius-3xl: 2.5rem;
-  
-  --shadow-neo: 6px 6px 0px #0F172A;
-  --shadow-neo-blue: 6px 6px 0px #2D5BFF;
-  --shadow-neo-orange: 6px 6px 0px #2D5BFF;
-  --shadow-neo-cyan: 6px 6px 0px #00E5FF;
-  --shadow-neo-sm: 3px 3px 0px #0F172A;
 }
 
 @layer base {
   body {
-    @apply bg-brand-cream text-brand-charcoal font-sans antialiased overflow-x-hidden;
+    @apply bg-brand-bg text-white font-sans antialiased overflow-x-hidden selection:bg-brand-accent selection:text-black;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display tracking-tight uppercase italic;
+    @apply font-display tracking-tight text-white;
   }
 }
 
 @layer components {
-  .glass {
-    @apply bg-white/70 backdrop-blur-md border border-white/20;
+  /* Liquid Glass / Double-Bezel Architecture */
+  .glass-panel {
+    @apply bg-white/[0.03] backdrop-blur-2xl border border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)];
   }
-  
+
+  /* Inner Core for Double-Bezel */
+  .glass-inner {
+    @apply bg-black/40 border border-white/5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)];
+  }
+
+  /* Premium Buttons */
   .btn-primary {
-    @apply px-8 py-4 bg-brand-primary text-white rounded-2xl font-black uppercase tracking-wider text-sm shadow-neo active:shadow-none active:translate-x-1 active:translate-y-1 transition-all;
+    @apply inline-flex items-center justify-center gap-2 px-8 py-4 bg-brand-accent text-brand-bg rounded-full font-bold uppercase tracking-wider text-sm transition-all duration-500 hover:scale-[0.98] hover:shadow-[0_0_30px_rgba(0,210,255,0.3)];
   }
 
   .btn-secondary {
-    @apply px-8 py-4 bg-white border-[1.5px] border-brand-charcoal rounded-2xl font-black uppercase tracking-wider text-sm hover:bg-brand-cream transition-colors active:scale-95;
+    @apply inline-flex items-center justify-center gap-2 px-8 py-4 bg-transparent border border-white/20 text-white rounded-full font-bold uppercase tracking-wider text-sm hover:bg-white/5 hover:border-white/30 transition-all duration-500 hover:scale-[0.98];
   }
 
-  .card-immersive {
-    @apply bg-white rounded-[40px] border-[1.5px] border-brand-charcoal overflow-hidden shadow-neo-sm hover:shadow-neo transition-all duration-300;
+  /* Typography utilities */
+  .text-balance {
+    text-wrap: balance;
   }
-
-  .badge-premium {
-    @apply inline-flex items-center gap-2 bg-brand-accent px-4 py-1.5 rounded-full border-[1.5px] border-brand-charcoal shadow-neo-sm;
-  }
-
-  .ambient-bg {
-    @apply fixed inset-0 pointer-events-none z-0;
+  
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-accent to-brand-accent-secondary;
   }
 }

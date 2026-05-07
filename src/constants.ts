@@ -3,56 +3,56 @@ import { MenuItem } from "./types";
 export const MENU_ITEMS: MenuItem[] = [
   {
     id: 'm1',
-    name: 'Classic Pork Sisig',
-    description: 'Tabogon style sizzling pork sisig with egg and chili.',
-    price: 145,
+    name: 'Nitro Pork Sisig',
+    description: 'Triple-cooked Tabogon pork belly, shattered chicharron, and a raw organic egg. Sizzling cast iron delivery.',
+    price: 185,
     category: 'Mains',
-    image: 'https://images.unsplash.com/photo-1626509653295-ff204780775d?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1626509653295-ff204780775d?auto=format&fit=crop&q=90&w=1200&sat=-20',
     isAvailable: true
   },
   {
     id: 'm2',
-    name: 'Grilled Pork Belly (Liempo)',
-    description: 'Succulent marinated grilled pork belly served with vinegar sauce.',
-    price: 165,
+    name: 'Charcoal Liempo',
+    description: 'Thick-cut pork belly smoked over coconut husk. Served with a reduction of spiced cane vinegar.',
+    price: 210,
     category: 'Mains',
-    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&q=90&w=1200&sat=-20',
     isAvailable: true
   },
   {
     id: 's1',
-    name: 'Crispy Lumpia Shanghai',
-    description: '10 pieces of crispy pork spring rolls with sweet and sour sauce.',
-    price: 95,
+    name: 'Golden Spring Rolls',
+    description: 'Hand-rolled heritage pork, water chestnuts, and organic carrots. Flash-fried for maximum acoustic crunch.',
+    price: 110,
     category: 'Sides',
-    image: 'https://images.unsplash.com/photo-1541696432-82c6da8ce7ec?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1541696432-82c6da8ce7ec?auto=format&fit=crop&q=90&w=1200&sat=-20',
     isAvailable: true
   },
   {
     id: 's2',
-    name: 'Fishball & Kikiam Platter',
-    description: 'A classic street food staple served with our signature sweet-spicy sauce.',
-    price: 75,
+    name: 'Street Platter No.1',
+    description: 'Curated selection of fish roe balls and kikiam, glazed in an electric sweet-chili emulsion.',
+    price: 95,
     category: 'Sides',
-    image: 'https://images.unsplash.com/photo-1524350300060-da87fb377544?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1524350300060-da87fb377544?auto=format&fit=crop&q=90&w=1200&sat=-20',
     isAvailable: true
   },
   {
     id: 'd1',
-    name: 'Iced Milo Dinosaur',
-    description: 'Refreshing chocolate malt drink topped with extra Milo powder.',
-    price: 65,
+    name: 'Malt Matrix (Dinosaur)',
+    description: 'Iced malt chocolate suspended with an excessive crust of raw Milo powder.',
+    price: 85,
     category: 'Drinks',
-    image: 'https://images.unsplash.com/photo-1544145945-f904253db0ad?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1544145945-f904253db0ad?auto=format&fit=crop&q=90&w=1200&sat=-20',
     isAvailable: true
   },
   {
     id: 'd2',
-    name: 'Fresh Buko Juice',
-    description: 'Pure coconut water served chilled in a glass or bottle.',
-    price: 55,
+    name: 'Cold Pressed Buko',
+    description: '100% pure Tabogon coconut water. Harvested daily, chilled instantly. Zero additives.',
+    price: 65,
     category: 'Drinks',
-    image: 'https://images.unsplash.com/photo-1556881286-fc6915169721?auto=format&fit=crop&q=80&w=800',
+    image: 'https://images.unsplash.com/photo-1556881286-fc6915169721?auto=format&fit=crop&q=90&w=1200&sat=-20',
     isAvailable: true
   }
 ];

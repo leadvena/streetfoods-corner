@@ -1,8 +1,9 @@
 {
-  "apiKey": "placeholder",
-  "authDomain": "placeholder",
-  "projectId": "placeholder",
-  "storageBucket": "placeholder",
-  "messagingSenderId": "placeholder",
-  "appId": "placeholder"
+  "apiKey": "AIzaSyDIjcBwOM7UVN8qvsQFz2EHu1aby6Q55o8",
+  "authDomain": "streetfoods-corner.firebaseapp.com",
+  "projectId": "streetfoods-corner",
+  "storageBucket": "streetfoods-corner.firebasestorage.app",
+  "messagingSenderId": "1442197688",
+  "appId": "1:1442197688:web:58fa4f0ca563a8dd02844d",
+  "measurementId": "G-P8NZ9M3CY8"
 }
